@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Heart Disease Prediction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1 class="mb-4">Heart Disease Prediction</h1>
+      <form id="predict-form" action="/predict" method="post">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Slope of peak exercise ST segment</label>
+            <select name="slope_of_peak_exercise_st_segment" class="form-control" title="Slope of peak exercise ST segment">
+              <option value="1" {% if inputs is defined and inputs['slope_of_peak_exercise_st_segment']=='1' %}selected{% endif %}>Upsloping</option>
+              <option value="2" {% if inputs is defined and inputs['slope_of_peak_exercise_st_segment']=='2' %}selected{% endif %}>Flat</option>
+              <option value="3" {% if inputs is defined and inputs['slope_of_peak_exercise_st_segment']=='3' %}selected{% endif %}>Downsloping</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Thal</label>
+            <select name="thal" class="form-control" title="thal (select)">
+              <option value="normal" {% if inputs is defined and inputs['thal']=='normal' %}selected{% endif %}>normal</option>
+              <option value="reversible_defect" {% if inputs is defined and inputs['thal']=='reversible_defect' %}selected{% endif %}>reversible_defect</option>
+              <option value="fixed_defect" {% if inputs is defined and inputs['thal']=='fixed_defect' %}selected{% endif %}>fixed_defect</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Resting blood pressure</label>
+            <input name="resting_blood_pressure" type="number" step="1" class="form-control" placeholder="e.g. 120" value="{% if inputs is defined %}{{ inputs['resting_blood_pressure'] }}{% endif %}" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Chest pain type</label>
+            <select name="chest_pain_type" class="form-control" title="Chest pain type">
+              <option value="1" {% if inputs is defined and inputs['chest_pain_type']=='1' %}selected{% endif %}>Typical angina</option>
+              <option value="2" {% if inputs is defined and inputs['chest_pain_type']=='2' %}selected{% endif %}>Atypical angina</option>
+              <option value="3" {% if inputs is defined and inputs['chest_pain_type']=='3' %}selected{% endif %}>Non-anginal pain</option>
+              <option value="4" {% if inputs is defined and inputs['chest_pain_type']=='4' %}selected{% endif %}>Asymptomatic</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Number of major vessels</label>
+            <input name="num_major_vessels" type="number" step="1" class="form-control" placeholder="e.g. 0" value="{% if inputs is defined %}{{ inputs['num_major_vessels'] }}{% endif %}" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Fasting blood sugar &gt; 120 mg/dl</label>
+            <select name="fasting_blood_sugar_gt_120_mg_per_dl" class="form-control" title="Fasting blood sugar &gt; 120 mg/dl">
+              <option value="1" {% if inputs is defined and inputs['fasting_blood_sugar_gt_120_mg_per_dl']=='1' %}selected{% endif %}>Yes</option>
+              <option value="0" {% if inputs is defined and inputs['fasting_blood_sugar_gt_120_mg_per_dl']=='0' %}selected{% endif %}>No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Resting EKG results</label>
+            <select name="resting_ekg_results" class="form-control" title="Resting EKG results">
+              <option value="0" {% if inputs is defined and inputs['resting_ekg_results']=='0' %}selected{% endif %}>Normal</option>
+              <option value="1" {% if inputs is defined and inputs['resting_ekg_results']=='1' %}selected{% endif %}>ST-T wave abnormality</option>
+              <option value="2" {% if inputs is defined and inputs['resting_ekg_results']=='2' %}selected{% endif %}>Left ventricular hypertrophy</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Serum cholesterol (mg/dl)</label>
+            <input name="serum_cholesterol_mg_per_dl" type="number" step="0.1" class="form-control" placeholder="e.g. 200" value="{% if inputs is defined %}{{ inputs['serum_cholesterol_mg_per_dl'] }}{% endif %}" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Oldpeak (ST depression)</label>
+            <input name="oldpeak_eq_st_depression" type="number" step="0.01" class="form-control" placeholder="e.g. 0.0" value="{% if inputs is defined %}{{ inputs['oldpeak_eq_st_depression'] }}{% endif %}" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label>Sex</label>
+            <select name="sex" class="form-control" title="Sex">
+              <option value="1" {% if inputs is defined and inputs['sex']=='1' %}selected{% endif %}>Male</option>
+              <option value="0" {% if inputs is defined and inputs['sex']=='0' %}selected{% endif %}>Female</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Age</label>
+            <input name="age" type="number" step="1" class="form-control" placeholder="e.g. 45" value="{% if inputs is defined %}{{ inputs['age'] }}{% endif %}" required>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Max heart rate achieved</label>
+            <input name="max_heart_rate_achieved" type="number" step="1" class="form-control" placeholder="e.g. 170" value="{% if inputs is defined %}{{ inputs['max_heart_rate_achieved'] }}{% endif %}" required>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Exercise induced angina</label>
+            <select name="exercise_induced_angina" class="form-control" title="Exercise induced angina">
+              <option value="1" {% if inputs is defined and inputs['exercise_induced_angina']=='1' %}selected{% endif %}>Yes</option>
+              <option value="0" {% if inputs is defined and inputs['exercise_induced_angina']=='0' %}selected{% endif %}>No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="text-center w-100">
+            <button id="text-center mt-3" type="submit" class="btn btn-primary">Predict</button>
+            
+            <div id="please-wait" class="mt-3" style="display:none">
+                <div class="spinner-border text-warning" role="status"></div>
+                <span>Please wait... predicting</span>
+            </div>
+        </div>
+
+      </form>
+      
+      {% if prediction is defined %}
+      <div class="card mt-4">
+        <div class="card-body">
+          <h3>Prediction: <span class="badge badge-info">{{ label }}</span></h3>
+          {% if probability is not none %}
+            <p>Predicted probability (positive class): <strong>{{ probability }}</strong>
+              <span class="text-muted">({{ (probability * 100) | round(2) }}%)</span>
+            </p>
+          {% endif %}
+          
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <script>
+      // Show "Please wait" and disable submit button while the form is submitting
+      (function(){
+        var form = document.getElementById('predict-form');
+        if (!form) return;
+        var btn = document.getElementById('predict-btn');
+        var wait = document.getElementById('please-wait');
+
+        form.addEventListener('submit', function(e){
+          try {
+            if (btn) {
+              btn.disabled = true;
+              btn.innerText = 'Predicting...';
+            }
+            if (wait) {
+              wait.style.display = 'block';
+            }
+          } catch(err) {
+            // ignore
+          }
+          // allow the form to submit normally
+        });
+      })();
+    </script>
+  </body>
+</html>
